@@ -3,7 +3,7 @@ const mysql = require('mysql');
 const bodyParser = require('body-parser');
 
 const app = express();
-const PORT = process.env.PORT || 4000;
+const PORT = process.env.PORT || 8000;
 app.set('view engine', 'ejs');
 
 // MySQL database connection
@@ -38,7 +38,7 @@ app.get('/', (req, res) => {
     });
 });
 
-app.post('/courses', (req, res) => {
+app.post('/', (req, res) => {
     const { coursecode, coursename, syllabus, progression } = req.body;
     connection.query('INSERT INTO courses (coursecode, coursename, syllabus, progression) VALUES (?, ?, ?, ?)',
         [coursecode, coursename, syllabus, progression],
@@ -69,6 +69,22 @@ app.post('/add', (req, res) => {
                 res.redirect('/');
             }
         });
+});
+// Route to handle course deletion
+app.get('/#/:id', (req, res) => {
+    const courseId = req.params.id;
+    connection.query('DELETE FROM courses WHERE id = ?', [courseId], (err) => {
+        if (err) {
+            console.error(err);
+            res.status(500).send('Internal Server Error');
+        } else {
+            res.redirect('/');
+        }
+    });
+});
+// Route to render the about page
+app.get('/about', (req, res) => {
+    res.render('about');
 });
 
 // Start the server

@@ -3,8 +3,30 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style.css">
   <title>Add Course</title>
 </head>
+<header>
+    <button class="menu-btn open" id="open-menu"  aria-label="Open Menu">
+      <span class="menu-icon">
+          <span class="bars"></span>
+          <span class="bars"></span>
+          <span class="bars"></span>
+      </span>
+  </button>
+  <nav id="nav-menu">
+      <button class="menu-btn close" id="close-menu">
+          <span>X</span>
+      </button>
+      
+      <ul>
+          
+          <li><a href="/"> COURSES</a></li>
+          <li><a href="/add"> ADD COURSE</a></li>
+          <li><a href="/about"> ABOUT </a></li>
+      </ul>
+  </nav>
+  </header>
 <body>
   <h1>Add Course</h1>
   <form action="/add" method="POST">
