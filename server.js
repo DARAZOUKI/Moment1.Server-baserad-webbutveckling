@@ -1,9 +1,11 @@
 const express = require('express');
 const mysql = require('mysql');
 const bodyParser = require('body-parser');
+require('dotenv').config();
+
 
 const app = express();
-const PORT = process.env.PORT || 7000;
+const PORT = process.env.PORT || 2000;
 app.set('view engine', 'ejs');
 app.use(express.static('public'));
 
