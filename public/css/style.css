@@ -149,6 +149,31 @@ nav  ul li {
     transition: background-color 0.3s ease, box-shadow 0.3s ease;
 }
 
+label {
+    display: block; /* Ensures each label appears on its own line */
+    margin-bottom: 10px; /* Adds space between labels */
+    font-weight: bold; /* Makes the label text bold */
+    color: #333; /* Sets the label text color */
+  }
+  /* CSS for input fields */
+input[type="text"] {
+    width: 100%; /* Makes the input field fill the entire width of its container */
+    padding: 10px; /* Adds padding inside the input field */
+    margin-bottom: 20px; /* Adds space between input fields */
+    border: 1px solid #ccc; /* Sets a border around the input field */
+    border-radius: 5px; /* Adds rounded corners to the input field */
+    box-sizing: border-box; /* Ensures padding and border are included in the input field's total width */
+  }
+  
+  /* CSS for submit button */
+  button[type="submit"] {
+    padding: 10px 20px; /* Adds padding inside the button */
+    background-color: #007bff; /* Sets the background color of the button */
+    color: #fff; /* Sets the text color of the button */
+    border: none; /* Removes the button border */
+    border-radius: 5px; /* Adds rounded corners to the button */
+    cursor: pointer; /* Changes the cursor to a pointer on hover */
+  }
 
 /* styles for larger screens  */
 @media only screen and (min-width: 1025px) {

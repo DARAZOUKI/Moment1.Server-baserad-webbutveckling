@@ -3,8 +3,9 @@ const mysql = require('mysql');
 const bodyParser = require('body-parser');
 
 const app = express();
-const PORT = process.env.PORT || 8000;
+const PORT = process.env.PORT || 7000;
 app.set('view engine', 'ejs');
+app.use(express.static('public'));
 
 // MySQL database connection
 const connection = mysql.createConnection({
