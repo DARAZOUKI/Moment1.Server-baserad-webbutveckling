@@ -5,7 +5,7 @@ require('dotenv').config();
 
 
 const app = express();
-const PORT = process.env.PORT || 4000;
+const PORT = process.env.PORT || 5000;
 app.set('view engine', 'ejs');
 app.use(express.static('public'));
 
@@ -16,7 +16,21 @@ const connection = mysql.createConnection({
     password: '',
     database: 'dt207g'
 });
-
+// Function to handle database connection errors and attempt reconnection
+function handleDatabaseError(err) {
+    console.error('Error connecting to MySQL database:', err);
+    if (err.code === 'PROTOCOL_CONNECTION_LOST') {
+        // Reconnect to the database
+        console.log('Attempting to reconnect to MySQL database...');
+        connection.connect((err) => {
+            if (err) {
+                console.error('Error reconnecting to MySQL database:', err);
+                return;
+            }
+            console.log('Reconnected to MySQL database');
+        });
+    }
+}
 // Connect to MySQL
 connection.connect((err) => {
     if (err) {
@@ -33,7 +47,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.get('/', (req, res) => {
     connection.query('SELECT * FROM courses', (err, rows) => {
         if (err) {
-            console.error(err);
+            handleDatabaseError(err);
             res.status(500).send('Internal Server Error');
         } else {
             res.render('courses', { courses: rows });
@@ -47,7 +61,7 @@ app.post('/', (req, res) => {
         [coursecode, coursename, syllabus, progression],
         (err) => {
             if (err) {
-                console.error(err);
+                handleDatabaseError(err);
                 res.status(500).send('Internal Server Error');
             } else {
                 res.redirect('/');
