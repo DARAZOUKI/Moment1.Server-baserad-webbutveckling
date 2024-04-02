@@ -25,7 +25,7 @@ const connection = mysql.createConnection({
 });
 // Function to handle database connection errors and attempt reconnection, implemented a function handleDatabaseError() to handle database connection errors. 
 //If a connection error with the code 'PROTOCOL_CONNECTION_LOST' occurs, indicating a lost connection, this function attempts to reconnect to the database.
-function handleDatabaseError(err) {
+/*function handleDatabaseError(err) {
     console.error('Error connecting to MySQL database:', err);
     if (err.code === 'PROTOCOL_CONNECTION_LOST') {
         // Reconnect to the database
@@ -38,7 +38,7 @@ function handleDatabaseError(err) {
             console.log('Reconnected to MySQL database');
         });
     }
-}
+}*/
 // Connect to MySQL
 connection.connect((err) => {
     if (err) {
@@ -56,7 +56,6 @@ app.use(bodyParser.urlencoded({ extended: true}));
 app.get('/', (req, res) => {
     connection.query('SELECT * FROM courses', (err, rows) => {
         if (err) {
-            handleDatabaseError(err);
             res.status(500).send('Internal Server Error');
         } else {
             res.render('courses', { courses: rows });
@@ -70,7 +69,6 @@ app.post('/', (req, res) => {
         [CourseCode, CourseName, Syllabus, Progression],
         (err) => {
             if (err) {
-                handleDatabaseError(err);
                 res.status(500).send('Internal Server Error');
             } else {
                 res.redirect('/');
