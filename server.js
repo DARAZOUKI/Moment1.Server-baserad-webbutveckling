@@ -18,6 +18,7 @@ app.use(express.static('public'));
 //The connection details such as host, user, password, and database name are specified in the createConnection() method.
 const connection = mysql.createConnection({
     host: 'localhost',
+    port: 3306,
     user: 'root',
     password: '',
     database: 'dt207g'
