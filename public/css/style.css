@@ -168,16 +168,26 @@ input[type="text"] {
   /* CSS for submit button */
   button[type="submit"] {
     padding: 10px 20px; /* Adds padding inside the button */
-    background-color: #007bff; /* Sets the background color of the button */
-    color: #fff; /* Sets the text color of the button */
+    background-color: #ed9d9d; /* Sets the background color of the button */
+    color: #040404; /* Sets the text color of the button */
     border: none; /* Removes the button border */
     border-radius: 5px; /* Adds rounded corners to the button */
     cursor: pointer; /* Changes the cursor to a pointer on hover */
   }
   .container {
     max-width: 800px;
+    height: 80vh;
     margin: 20px auto;
     padding: 0 20px;
+    background-color: #ed9d9d;
+
+  }
+  .container p{
+    margin-bottom: 10px;
+  }
+  .container h1 {
+    margin-bottom: 20px;
+    margin-top: 10px;
   }
 
 /* styles for larger screens  */
@@ -228,6 +238,7 @@ input[type="text"] {
         align-items: center;
         text-align: center;
         width: 100%;
+        background-color: #ed9d9d;
     }
 
     nav ul {
@@ -266,6 +277,7 @@ header{
         align-items: center;
         text-align: center;
         width: 100%;
+        background-color: #ed9d9d;
     }
 
     nav ul {

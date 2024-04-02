@@ -1,3 +1,7 @@
+
+/* set up an Express application by requiring the express module and initializing it with express(). 
+ configured the application to use the EJS view engine and to serve static files from the "public" directory using express.static().*/
+
 const express = require('express');
 const mysql = require('mysql');
 const bodyParser = require('body-parser');
@@ -5,18 +9,21 @@ require('dotenv').config();
 
 
 const app = express();
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 1000;
 app.set('view engine', 'ejs');
 app.use(express.static('public'));
 
-// MySQL database connection
+
+// MySQL database connection  connection to a MySQL database using the mysql module. 
+//The connection details such as host, user, password, and database name are specified in the createConnection() method.
 const connection = mysql.createConnection({
     host: 'localhost',
     user: 'root',
     password: '',
     database: 'dt207g'
 });
-// Function to handle database connection errors and attempt reconnection
+// Function to handle database connection errors and attempt reconnection, implemented a function handleDatabaseError() to handle database connection errors. 
+//If a connection error with the code 'PROTOCOL_CONNECTION_LOST' occurs, indicating a lost connection, this function attempts to reconnect to the database.
 function handleDatabaseError(err) {
     console.error('Error connecting to MySQL database:', err);
     if (err.code === 'PROTOCOL_CONNECTION_LOST') {
@@ -40,10 +47,11 @@ connection.connect((err) => {
     console.log('Connected to MySQL database');
 });
 
-// Middleware
-app.use(bodyParser.urlencoded({ extended: false }));
+// Middleware ,set up body-parser middleware to parse incoming request bodies. This middleware is used to handle form submissions in routes
+app.use(bodyParser.urlencoded({ extended: true}));
 
-// Routes
+// Routes , defined several routes to handle different HTTP requests
+// GET route for '/' renders the "courses" view, querying all courses from the database and passing them to the view for rendering.
 app.get('/', (req, res) => {
     connection.query('SELECT * FROM courses', (err, rows) => {
         if (err) {
@@ -54,11 +62,11 @@ app.get('/', (req, res) => {
         }
     });
 });
-
+// POST route for '/' handles form submissions to add a new course to the database.
 app.post('/', (req, res) => {
-    const { coursecode, coursename, syllabus, progression } = req.body;
-    connection.query('INSERT INTO courses (coursecode, coursename, syllabus, progression) VALUES (?, ?, ?, ?)',
-        [coursecode, coursename, syllabus, progression],
+    const { CourseCode, CourseName, Syllabus, Progression } = req.body;
+    connection.query('INSERT INTO courses (CourseCode, CourseName, Syllabus, Progression) VALUES (?, ?, ?, ?)',
+        [CourseCode, CourseName, Syllabus, Progression],
         (err) => {
             if (err) {
                 handleDatabaseError(err);
@@ -75,9 +83,9 @@ app.get('/add', (req, res) => {
 
 // Route to handle form submission and add a new course to the database
 app.post('/add', (req, res) => {
-    const { coursecode, coursename, progression } = req.body;
-    connection.query('INSERT INTO courses (coursecode, coursename, progression) VALUES (?, ?, ?)',
-        [coursecode, coursename, progression],
+    const { CourseCode, CourseName, Syllabus, Progression } = req.body;
+    connection.query('INSERT INTO courses (CourseCode, CourseName, Syllabus, Progression) VALUES (?, ?, ?, ?)',
+        [CourseCode, CourseName, Syllabus, Progression],
         (err) => {
             if (err) {
                 console.error(err);
@@ -88,9 +96,9 @@ app.post('/add', (req, res) => {
         });
 });
 // Route to handle course deletion
-app.get('/#/:id', (req, res) => {
-    const courseId = req.params.id;
-    connection.query('DELETE FROM courses WHERE id = ?', [courseId], (err) => {
+app.get('/delete/:Id', (req, res) => {
+    const courseId = req.params.Id;
+    connection.query('DELETE FROM courses WHERE Id = ?', [courseId], (err) => {
         if (err) {
             console.error(err);
             res.status(500).send('Internal Server Error');
