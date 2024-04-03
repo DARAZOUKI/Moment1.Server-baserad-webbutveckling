@@ -41,14 +41,14 @@ function handleDatabaseError(err) {
     }
 }
 // Connect to MySQL
-connection.connect((err) => {
+/*connection.connect((err) => {
     if (err) {
         console.error('Error connecting to MySQL database:', err);
         return;
     }
     console.log('Connected to MySQL database');
 });
-
+*/
 // Middleware ,set up body-parser middleware to parse incoming request bodies. This middleware is used to handle form submissions in routes
 app.use(bodyParser.urlencoded({ extended: false}));
 
