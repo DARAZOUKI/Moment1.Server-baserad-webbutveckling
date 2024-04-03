@@ -9,7 +9,7 @@ require('dotenv').config();
 
 
 const app = express();
-const PORT = process.env.PORT || 1000;
+const PORT = process.env.PORT || 9000;
 app.set('view engine', 'ejs');
 app.use(express.static('public'));
 
@@ -18,14 +18,13 @@ app.use(express.static('public'));
 //The connection details such as host, user, password, and database name are specified in the createConnection() method.
 const connection = mysql.createConnection({
     host: 'localhost',
-    port: 3306,
     user: 'root',
     password: '',
     database: 'dt207g'
 });
 // Function to handle database connection errors and attempt reconnection, implemented a function handleDatabaseError() to handle database connection errors. 
 //If a connection error with the code 'PROTOCOL_CONNECTION_LOST' occurs, indicating a lost connection, this function attempts to reconnect to the database.
-/*function handleDatabaseError(err) {
+function handleDatabaseError(err) {
     console.error('Error connecting to MySQL database:', err);
     if (err.code === 'PROTOCOL_CONNECTION_LOST') {
         // Reconnect to the database
@@ -38,7 +37,7 @@ const connection = mysql.createConnection({
             console.log('Reconnected to MySQL database');
         });
     }
-}*/
+}
 // Connect to MySQL
 connection.connect((err) => {
     if (err) {
@@ -49,13 +48,14 @@ connection.connect((err) => {
 });
 
 // Middleware ,set up body-parser middleware to parse incoming request bodies. This middleware is used to handle form submissions in routes
-app.use(bodyParser.urlencoded({ extended: true}));
+app.use(bodyParser.urlencoded({ extended: false}));
 
 // Routes , defined several routes to handle different HTTP requests
 // GET route for '/' renders the "courses" view, querying all courses from the database and passing them to the view for rendering.
 app.get('/', (req, res) => {
     connection.query('SELECT * FROM courses', (err, rows) => {
         if (err) {
+            handleDatabaseError(err);
             res.status(500).send('Internal Server Error');
         } else {
             res.render('courses', { courses: rows });
@@ -65,15 +65,28 @@ app.get('/', (req, res) => {
 // POST route for '/' handles form submissions to add a new course to the database.
 app.post('/', (req, res) => {
     const { CourseCode, CourseName, Syllabus, Progression } = req.body;
-    connection.query('INSERT INTO courses (CourseCode, CourseName, Syllabus, Progression) VALUES (?, ?, ?, ?)',
-        [CourseCode, CourseName, Syllabus, Progression],
+    connection.query('INSERT INTO courses ( CourseCode, CourseName, Syllabus, Progression) VALUES (?, ?, ?, ?)',
+        [ CourseCode, CourseName, Syllabus, Progression],
         (err) => {
             if (err) {
+                handleDatabaseError(err);
                 res.status(500).send('Internal Server Error');
             } else {
                 res.redirect('/');
             }
         });
+});
+// Route to handle course deletion
+app.get('/delete/:CourseId', (req, res) => {
+    const courseId = req.params.CourseId;
+    connection.query('DELETE FROM courses WHERE CourseId = ?', [courseId], (err) => {
+        if (err) {
+            console.error(err);
+            res.status(500).send('Internal Server Error');
+        } else {
+            res.redirect('/');
+        }
+    });
 });
 // Route to render the add course form
 app.get('/add', (req, res) => {
@@ -84,7 +97,7 @@ app.get('/add', (req, res) => {
 app.post('/add', (req, res) => {
     const { CourseCode, CourseName, Syllabus, Progression } = req.body;
     connection.query('INSERT INTO courses (CourseCode, CourseName, Syllabus, Progression) VALUES (?, ?, ?, ?)',
-        [CourseCode, CourseName, Syllabus, Progression],
+        [ CourseCode, CourseName, Syllabus, Progression],
         (err) => {
             if (err) {
                 console.error(err);
@@ -94,18 +107,7 @@ app.post('/add', (req, res) => {
             }
         });
 });
-// Route to handle course deletion
-app.get('/delete/:Id', (req, res) => {
-    const courseId = req.params.Id;
-    connection.query('DELETE FROM courses WHERE Id = ?', [courseId], (err) => {
-        if (err) {
-            console.error(err);
-            res.status(500).send('Internal Server Error');
-        } else {
-            res.redirect('/');
-        }
-    });
-});
+
 // Route to render the about page
 app.get('/about', (req, res) => {
     res.render('about');

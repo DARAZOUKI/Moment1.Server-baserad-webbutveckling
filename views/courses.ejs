@@ -37,7 +37,7 @@
         <p>Course Code: <%= course.CourseCode %></p>
         <p>Progression: <%= course.Progression %></p>
         <p>Syllabus: <%= course.Syllabus %></p>
-        <a href="/#/<%= course.Id %>">Delete</a>
+        <a href="/delete/<%= course.CourseId %>">Delete</a>
       </li>
     <% }); %>
   </ul>
