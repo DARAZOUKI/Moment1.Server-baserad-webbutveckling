@@ -115,6 +115,6 @@ app.get('/about', (req, res) => {
 });
 
 // Start the server
-app.listen(10000, '0.0.0.0', () => {
+app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
 });
