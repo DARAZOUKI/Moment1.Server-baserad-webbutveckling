@@ -16,8 +16,9 @@ app.use(express.static('public'));
 
 // MySQL database connection  connection to a MySQL database using the mysql module. 
 //The connection details such as host, user, password, and database name are specified in the createConnection() method.
-const connection = mysql.createConnection({
-    host: '10000',
+const pool = mysql.createPool({
+    connectionLimit: 10,
+    host: 'localhost',
     port: 3306,
     user: 'root',
     password: '',
@@ -53,15 +54,30 @@ app.use(bodyParser.urlencoded({ extended: false}));
 
 // Routes , defined several routes to handle different HTTP requests
 // GET route for '/' renders the "courses" view, querying all courses from the database and passing them to the view for rendering.
+ // Get a connection from the pool
+ // Routes
 app.get('/', (req, res) => {
+ pool.getConnection((err, connection) => {
+    if (err) {
+        console.error('Error getting MySQL connection from pool:', err);
+        res.status(500).send('Internal Server Error');
+        return;
+    }
+    
+    // Use the connection to query the database
     connection.query('SELECT * FROM courses', (err, rows) => {
+        // Release the connection back to the pool
+        connection.release();
+        
         if (err) {
-            handleDatabaseError(err);
+            console.error('Error querying database:', err);
             res.status(500).send('Internal Server Error');
-        } else {
-            res.render('courses', { courses: rows });
+            return;
         }
+        
+        res.render('courses', { courses: rows });
     });
+});
 });
 // POST route for '/' handles form submissions to add a new course to the database.
 app.post('/', (req, res) => {
