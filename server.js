@@ -19,7 +19,6 @@ app.use(express.static('public'));
 const pool = mysql.createPool({
     connectionLimit: 10,
     host: 'localhost',
-    port: 3306,
     user: 'root',
     password: '',
     database: 'dt207g'
@@ -41,43 +40,28 @@ function handleDatabaseError(err) {
     }
 }
 // Connect to MySQL
-/*connection.connect((err) => {
+connection.connect((err) => {
     if (err) {
         console.error('Error connecting to MySQL database:', err);
         return;
     }
     console.log('Connected to MySQL database');
 });
-*/
+
 // Middleware ,set up body-parser middleware to parse incoming request bodies. This middleware is used to handle form submissions in routes
 app.use(bodyParser.urlencoded({ extended: false}));
 
 // Routes , defined several routes to handle different HTTP requests
 // GET route for '/' renders the "courses" view, querying all courses from the database and passing them to the view for rendering.
- // Get a connection from the pool
- // Routes
 app.get('/', (req, res) => {
- pool.getConnection((err, connection) => {
-    if (err) {
-        console.error('Error getting MySQL connection from pool:', err);
-        res.status(500).send('Internal Server Error');
-        return;
-    }
-    
-    // Use the connection to query the database
     connection.query('SELECT * FROM courses', (err, rows) => {
-        // Release the connection back to the pool
-        connection.release();
-        
         if (err) {
-            console.error('Error querying database:', err);
+            handleDatabaseError(err);
             res.status(500).send('Internal Server Error');
-            return;
+        } else {
+            res.render('courses', { courses: rows });
         }
-        
-        res.render('courses', { courses: rows });
     });
-});
 });
 // POST route for '/' handles form submissions to add a new course to the database.
 app.post('/', (req, res) => {
