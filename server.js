@@ -9,7 +9,7 @@ require('dotenv').config();
 
 
 const app = express();
-const PORT = process.env.PORT || 9000;
+const PORT = process.env.PORT || 4000;
 app.set('view engine', 'ejs');
 app.use(express.static('public'));
 
@@ -17,10 +17,10 @@ app.use(express.static('public'));
 // MySQL database connection  connection to a MySQL database using the mysql module. 
 //The connection details such as host, user, password, and database name are specified in the createConnection() method.
 const connection = mysql.createConnection({
-    host: 'localhost',
+    host: '34.72.224.95',
     user: 'root',
-    password: '',
-    database: 'dt207g'
+    password: 'YES',
+    database: '207-moment1'
 });
 // Function to handle database connection errors and attempt reconnection, implemented a function handleDatabaseError() to handle database connection errors. 
 //If a connection error with the code 'PROTOCOL_CONNECTION_LOST' occurs, indicating a lost connection, this function attempts to reconnect to the database.
