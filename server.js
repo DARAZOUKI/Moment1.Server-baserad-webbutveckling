@@ -9,7 +9,7 @@ require('dotenv').config();
 
 
 const app = express();
-const PORT = process.env.PORT || 4000;
+const PORT = process.env.PORT || 9000;
 app.set('view engine', 'ejs');
 app.use(express.static('public'));
 
@@ -19,7 +19,7 @@ app.use(express.static('public'));
 const connection = mysql.createConnection({
     host: '34.72.224.95',
     user: 'root',
-    password: 'YES',
+    password: 'dania',
     database: '207-moment1'
 });
 // Function to handle database connection errors and attempt reconnection, implemented a function handleDatabaseError() to handle database connection errors. 

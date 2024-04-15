@@ -148,7 +148,32 @@ nav  ul li {
 .bars {
     transition: background-color 0.3s ease, box-shadow 0.3s ease;
 }
+.courses ul {
+    list-style-type: none;
+    padding: 0;
+  }
 
+  .courses li {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px;
+    margin-bottom: 10px;
+    background-color: #f9f9f9;
+  }
+
+  .courses li p {
+    margin: 0;
+  }
+
+  .courses li a {
+    color: #923c8c;
+    text-decoration: none;
+    font-weight: bold;
+  }
+
+  .courses li a:hover {
+    color: #1f06be;
+  }
 label {
     display: block; /* Ensures each label appears on its own line */
     margin-bottom: 10px; /* Adds space between labels */
